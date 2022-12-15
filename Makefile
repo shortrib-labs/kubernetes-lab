@@ -59,26 +59,7 @@ init: $(tfvars)
 	@(cd $(SOURCE_DIR)/terraform && terraform init)
 
 .PHONY: all
-all: create bootstrap 
-
-.PHONY: bootstrap
-bootstrap: $(namespaces) $(bootstrap_files)
-
-.PHONY: $(namespaces)
-$(namespaces):
-	@kubectl create namespace $@ --dry-run=client -o yaml --save-config | kubectl apply -f -
-	@gpg --export-secret-keys --armor $(key_fp) \
-			| kubectl create secret generic sops-gpg \
-					--namespace=$@ \
-					--from-file=sops.asc=/dev/stdin \
-					--dry-run=client \
-					--output=yaml \
-					--save-config \
-			| kubectl apply -f -
-
-.PHONY: $(bootstrap_files)
-$(bootstrap_files):
-	@kubectl apply -f $@
+all: create 
 
 .PHONY: create
 create: init test cluster 
