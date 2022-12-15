@@ -86,8 +86,7 @@ create: init test cluster
 .PHONY: cluster
 cluster: $(tfvars) init
 	@(cd $(SOURCE_DIR)/terraform && terraform apply -var-file $(tfvars) --auto-approve)
-	VSPHERE_USERNAME=$(vpshere_username) VSPHERE_PASSWORD=$(vsphere_password) clusterctl init --infrastructure vsphere
-
+	@VSPHERE_USERNAME=$(vpshere_username) VSPHERE_PASSWORD=$(vsphere_password) clusterctl init --infrastructure vsphere --kubeconfig $(SECRETS_DIR)/kubeconfig
 
 .PHONY: test
 test: $(tfvars)
