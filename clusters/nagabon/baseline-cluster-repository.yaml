@@ -3,7 +3,7 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
 metadata:
-  name: cluster
+  name: baseline-cluster
   namespace: flux-system
 spec:
   interval: 1m0s
@@ -11,4 +11,4 @@ spec:
     branch: main
   secretRef:
     name: cluster-deploy-key
-  url: ssh://git@github.com/shortrib-labs/cluster
+  url: ssh://git@github.com/shortrib-labs/baseline-cluster

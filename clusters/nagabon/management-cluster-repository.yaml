@@ -1,0 +1,14 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: management-cluster
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  ref:
+    branch: feature-kurl-cluster
+  secretRef:
+    name: management-deploy-key
+  url: ssh://git@github.com/shortrib-labs/management-cluster
+
