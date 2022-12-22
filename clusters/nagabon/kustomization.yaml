@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- baseline-cluster-repository.yaml
+- baseline-cluster.yaml
+- management-cluster-repository.yaml
+- management-cluster.yaml
+- management-deploy-key.yaml
