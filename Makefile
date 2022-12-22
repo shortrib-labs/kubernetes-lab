@@ -10,9 +10,6 @@ kurl_yaml		:= $$(yq '.spec.kubernetes.clusterName="$(hostname)"' kurl-installer.
 vsphere_username := "$(shell yq .vsphere.username $(params_yaml))"
 vsphere_password := "$(shell sops --decrypt --extract '["vsphere"]["password"]' $(params_yaml))"
 
-namespaces       := $(shell ls -1 base)
-bootstrap_files  := $(shell find base -name "*sync.yaml")
-
 key_fp  := FAC1CF820538F4A07C8F4657DAD5DC6A21303194
 
 define TFVARS
@@ -62,12 +59,16 @@ init: $(tfvars)
 all: create 
 
 .PHONY: create
-create: init test cluster 
+create: init test cluster bootstrap
 
 .PHONY: cluster
 cluster: $(tfvars) init
 	@(cd $(SOURCE_DIR)/terraform && terraform apply -var-file $(tfvars) --auto-approve)
+
+.PHONY: bootstrap
+bootstrap:
 	@VSPHERE_USERNAME=$(vpshere_username) VSPHERE_PASSWORD=$(vsphere_password) clusterctl init --infrastructure vsphere --kubeconfig $(SECRETS_DIR)/kubeconfig
+	 kubectl apply -f https://raw.githubusercontent.com/shortrib-labs/management-cluster/main/base/flux-system/gotk-components.yaml
 
 .PHONY: test
 test: $(tfvars)
