@@ -7,7 +7,7 @@ metadata:
 spec:
   interval: 1m0s
   ref:
-    branch: feature-kurl-cluster
+    branch: main
   secretRef:
     name: management-deploy-key
   url: ssh://git@github.com/shortrib-labs/management-cluster
